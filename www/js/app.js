@@ -19,13 +19,13 @@ var pantallas = [ {
 }, {
 	id : 'app.principal', // Pantalla principal
 	vista : 'cuerpo',
-	controlador : true
-}, {
+	controlador : false
+}/*, {
 	id : 'app.detalle', // Pantalla detalle
 	url : '/detalle/:id',
 	vista : 'cuerpo',
-	controlador : true
-}
+	controlador : false
+}*/
 
 ];
 

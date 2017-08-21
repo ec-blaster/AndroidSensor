@@ -1,0 +1,42 @@
+<!-- Contenedor principal de la aplicación -->
+<ion-side-menus>
+	<!-- Menú lateral -->
+	<ion-side-menu side="left" expose-aside-when="large">
+		<ion-header-bar class="bar-dark">
+			<h1 class="title">Opciones</h1>
+			<!-- <div class="buttons">
+	  		<button class="button button-icon ion-gear-b" ng-click="ir('app.config')"></button>
+	  	</div> -->
+		</ion-header-bar>
+		<ion-content>
+			<ion-list>
+ 				<div ng-repeat="opcion in menu">
+					<ion-item ng-show="(opcion.inicial || menu[opcion.padre].desplegado)" nav-clear ng-class="opcion.seleccionado ? 'opcionSel' : 'opcionNoSel'"
+										class="item-icon-left fondoMenu" ng-click="selOpcion(opcion,$index)">
+						<i class="icon {{icono(opcion)}}"></i>
+						{{opcion.texto}}
+					</ion-item>
+				</div>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+	<!-- Fin del menú lateral -->
+	
+	<!-- Contenido principal -->
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-balanced">
+			<ion-nav-buttons side="left">
+				<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+	  	</ion-nav-buttons>
+	  	<ion-nav-back-button class="button-clear">
+	  		<i class="ion-arrow-left-c"></i>Volver
+	  	</ion-nav-back-button>
+		</ion-nav-bar>
+		
+		<!-- Utilizaremos una vista denominada "cuerpo" para contener las páginas principales de la aplicación  -->
+		<ion-nav-view name="cuerpo" animation="slide-left-right">
+		</ion-nav-view>
+	</ion-side-menu-content>
+	<!-- Fin del contenido principal -->
+</ion-side-menus>
+<!-- Fin del contenedor principal -->
