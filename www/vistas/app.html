@@ -4,18 +4,15 @@
 	<ion-side-menu side="left" expose-aside-when="large">
 		<ion-header-bar class="bar-dark">
 			<h1 class="title">Opciones</h1>
-			<!-- <div class="buttons">
-	  		<button class="button button-icon ion-gear-b" ng-click="ir('app.config')"></button>
-	  	</div> -->
 		</ion-header-bar>
 		<ion-content>
 			<ion-list>
- 				<div ng-repeat="opcion in menu">
-					<ion-item ng-show="(opcion.inicial || menu[opcion.padre].desplegado)" nav-clear ng-class="opcion.seleccionado ? 'opcionSel' : 'opcionNoSel'"
-										class="item-icon-left fondoMenu" ng-click="selOpcion(opcion,$index)">
-						<i class="icon {{icono(opcion)}}"></i>
+				<div ng-repeat="opcion in menu">
+					<ion-item ng-show="opcion.url" nav-clear menu-close href="#{{opcion.url}}" class="item-icon-left">
+						<i class="icon {{opcion.icono}}"></i>
 						{{opcion.texto}}
 					</ion-item>
+					<ion-item ng-hide="opcion.url" nav-clear menu-close class="item-divider" style="background-color: #dddddd;">{{opcion.texto}}</ion-item>
 				</div>
 			</ion-list>
 		</ion-content>

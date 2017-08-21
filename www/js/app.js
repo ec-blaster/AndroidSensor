@@ -20,14 +20,15 @@ var pantallas = [ {
 	id : 'app.principal', // Pantalla principal
 	vista : 'cuerpo',
 	controlador : false
-}/*, {
-	id : 'app.detalle', // Pantalla detalle
-	url : '/detalle/:id',
+}, {
+	id : 'app.config_mqtt', // Pantalla de configuración de MQTT
 	vista : 'cuerpo',
 	controlador : false
-}*/
-
-];
+}, {
+	id : 'app.sensores', // Pantalla de configuración de sensores
+	vista : 'cuerpo',
+	controlador : false
+} ];
 
 /**
  * Configuramos las rutas dinámicamente.

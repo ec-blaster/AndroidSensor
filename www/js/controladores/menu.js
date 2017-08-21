@@ -1,9 +1,7 @@
 /**
  * Controlador del menú
  */
-app.controller("CtrlApp", function($scope, $rootScope, $ionicSideMenuDelegate,
-		$state) {
-
+app.controller("CtrlApp", function($scope, $ionicSideMenuDelegate) {
 	$scope.menu = [];
 	$scope.cargarMenu = function() {
 
@@ -30,25 +28,16 @@ app.controller("CtrlApp", function($scope, $rootScope, $ionicSideMenuDelegate,
 		$scope.menu = [ {
 			texto : 'Inicio',
 			icono : 'ion-home',
-			tipo : 'principal',
-			inicial : true
+			url : '/app/principal'
 		}, {
-			texto : 'Búsqueda avanzada',
-			icono : 'ion-search',
-			tipo : 'principal',
-			inicial : true
+			texto : 'Servidor MQTT',
+			icono : 'ion-radio-waves',
+			url : '/app/config_mqtt'
 		}, {
-			texto : 'Categorías',
-			icono : 'ion-pricetag',
-			tipo : 'principal',
-			inicial : true
+			texto : 'Sensores',
+			icono : 'ion-speedometer',
+			url : '/app/sensores'
 		} ];
-		$scope.orden = 3;
-		/**
-		 * Lanzamos una petición al API para obtener la lista de categorías de
-		 * los anuncios
-		 */
-		// ApiTablon.categorias().then($scope.cargarCategorias);
 	}
 	$scope.cargarMenu();
 });
