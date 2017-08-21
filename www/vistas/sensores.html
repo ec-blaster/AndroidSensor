@@ -9,7 +9,7 @@
 	</style>
 	<ion-content>
 		<ion-list ng-repeat="sensor in sensores">
- 		  <ion-item class="item-icon-left" ng-click="modificarSensor(sensor.id)">
+ 		  <ion-item class="item-icon-left" ng-click="modificarSensor($index)">
 				<i class="icon {{sensor.icono}}"></i>
 				<ion-option-button class="button-assertive" ng-click="sensores.splice($index, 1)"><i class="icon ion-android-cancel"></i></ion-option-button>
 				{{sensor.nombre}}

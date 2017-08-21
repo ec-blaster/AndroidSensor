@@ -5,33 +5,38 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 	$scope.sensores = [];
 	$scope.vDetalleSensor = null;
 	$scope.tipos = tiposSensores;
+	$scope.nuevo = false;
 
 	$scope.cargarSensores = function() {
 		$scope.sensores = [ {
-			id : 'temp1',
 			nombre : "Temperatura interior",
+			tipo : 'dht11_temp',
 			icono : 'ion-thermometer'
 		}, {
-			id : 'temp2',
 			nombre : "Temperatura exterior",
+			tipo : 'dht22_temp',
 			icono : 'ion-thermometer'
 		}, {
-			id : 'hum1',
 			nombre : "Humedad interior",
+			tipo : 'dht11_hum',
 			icono : 'ion-waterdrop'
 		}, {
-			id : 'hum2',
 			nombre : "Humedad exterior",
+			tipo : 'dht22_hum',
 			icono : 'ion-waterdrop'
 		} ];
 	};
 
 	$scope.nuevoSensor = function() {
+		$scope.sensor = {};
+		$scope.nuevo = true;
 		$scope.abrirSensor();
 	};
 
 	$scope.modificarSensor = function(id) {
-		$scope.abrirSensor(id);
+		$scope.sensor = $scope.sensores[id];
+		$scope.nuevo = false;
+		$scope.abrirSensor();
 	};
 
 	// Ventana modal de detalles del sensor
@@ -47,7 +52,14 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 	};
 
 	$scope.cerrarSensor = function() {
+		if ($scope.nuevo) {
+			$scope.sensores[$scope.sensores.length] = $scope.sensor;
+		}
 		$scope.vDetalleSensor.hide();
+	};
+
+	$scope.selTipoSensor = function() {
+		alert("Hey");
 	};
 
 	$scope.$on('$destroy', function() {

@@ -11,9 +11,13 @@
   	<span class="input-label">Nombre</span>
     <input type="text" placeholder="nombre" ng-model="sensor.nombre">
   </label>
-  <label class="item item-input item-stacked-label">
-    <span class="input-label">Tipo sensor</span>
-    <input type="text" placeholder="tipo" ng-model="sensor.tipo">
+  <label class="item item-input item-select">
+    <div class="input-label">
+    Tipo sensor
+    </div>
+    <select ng-model="sensor.tipo" ng-change="selTipoSensor()">
+      <option ng-repeat="tipo in tipos" value="{{tipo.id}}">{{tipo.nombre}}</option>
+    </select>
   </label>
   <label class="item item-input item-stacked-label">
     <span class="input-label">GPIO</span>
@@ -32,9 +36,5 @@
     <input type="number" placeholder="periodicidad" ng-model="sensor.periodicidad">
   </label>
 </div>
-<button class="button button-positive button-block" ng-click="cerrarSensor()">
- <i class="icon ion-search"></i>
-   Buscar
-</button>
 </ion-content>
 </ion-modal-view>
