@@ -1,0 +1,40 @@
+<ion-modal-view>
+<ion-header-bar class="bar-calm flat">
+	<h1 class="title">Configuración del sensor</h1>
+	<div class="buttons">
+		<button class="button button-clear icon ion-close" ng-click="cerrarSensor()"></button>
+	</div>
+</ion-header-bar>
+<ion-content class="has-header padding">
+<div class="list-inset">
+  <label class="item item-input item-stacked-label">
+  	<span class="input-label">Nombre</span>
+    <input type="text" placeholder="nombre" ng-model="sensor.nombre">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Tipo sensor</span>
+    <input type="text" placeholder="tipo" ng-model="sensor.tipo">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">GPIO</span>
+    <input type="number" placeholder="gpio" ng-model="sensor.gpio">
+  </label>
+  <label class="item item-input item-stacked-label">
+  	<span class="input-label">Tópico</span>
+    <input type="text" placeholder="topico" ng-model="sensor.topico">
+  </label>
+  <label class="item item-input item-stacked-label">
+  	<span class="input-label">Atributo</span>
+    <input type="text" placeholder="atrib" ng-model="sensor.atributo">
+  </label>
+  <label class="item item-input item-stacked-label">
+  	<span class="input-label">Periodicidad (segs)</span>
+    <input type="number" placeholder="periodicidad" ng-model="sensor.periodicidad">
+  </label>
+</div>
+<button class="button button-positive button-block" ng-click="cerrarSensor()">
+ <i class="icon ion-search"></i>
+   Buscar
+</button>
+</ion-content>
+</ion-modal-view>

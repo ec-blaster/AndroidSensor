@@ -27,7 +27,7 @@ var pantallas = [ {
 }, {
 	id : 'app.sensores', // Pantalla de configuración de sensores
 	vista : 'cuerpo',
-	controlador : false
+	controlador : true
 } ];
 
 /**

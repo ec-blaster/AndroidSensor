@@ -1,16 +1,21 @@
-<style>
+<ion-view title="Definición de sensores" cache-view="false">
+  <style>
   .boton-centrado
   {
 	  margin-left: 25%;
 		margin-right: 25%;
 		width: 50% !important;
   }
-</style>
-<ion-view title="Definición de sensores" cache-view="false">
+	</style>
 	<ion-content>
-		<ion-list>
-			<button class="button button-block button-balanced boton-centrado">Nuevo</button>
+		<ion-list ng-repeat="sensor in sensores">
+ 		  <ion-item class="item-icon-left" ng-click="modificarSensor(sensor.id)">
+				<i class="icon {{sensor.icono}}"></i>
+				<ion-option-button class="button-assertive" ng-click="sensores.splice($index, 1)"><i class="icon ion-android-cancel"></i></ion-option-button>
+				{{sensor.nombre}}
+			</ion-item>
 		</ion-list>
+		<button class="button button-block button-calm boton-centrado" ng-click="nuevoSensor()">Nuevo</button>
 		<div class="button-bar">
 		  <a class="button button-positive">Guardar</a>
 		  <a class="button button-assertive">Cancelar</a>
