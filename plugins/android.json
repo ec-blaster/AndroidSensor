@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "fr.drangies.cordova.serial": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        }
+    },
+    "dependent_plugins": {}
+}

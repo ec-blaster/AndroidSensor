@@ -17,5 +17,7 @@
     "ionic-plugin-keyboard",
     "cordovarduino"
   ],
-  "cordovaPlatforms": []
+  "cordovaPlatforms": [
+    "android"
+  ]
 }
