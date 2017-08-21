@@ -1,85 +1,88 @@
-// Ionic Starter App
+/**
+ * app.js Definición general del funcionamiento de la aplicación
+ */
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+var app = angular.module('androidSensor', [ 'ionic' ]);
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+/**
+ * Definimos las pantallas de la aplicación. Para cada pantalla, indicaremos al
+ * menos un id y una vista. Esta vista está definida en app.html como contenedor
+ * principal. Además, indicaremos si la pantalla tiene o no un controlador. Cada
+ * controlador deberá estar definido o bien en controladores.js o bien en
+ * cualquier otro JS incluído desde la pantalla principal. El controlador se
+ * denominará "Ctrl<Pantalla>", siendo <Pantalla> el identificador de la
+ * pantalla. Cada identificador irá precedido por el prefijo "app." indicando
+ * que cuelgan de la principal.
+ */
+var pantallas = [ {
+	id : 'app' // Contenedor principal de la aplicación
+}, {
+	id : 'app.principal', // Pantalla principal
+	vista : 'cuerpo',
+	controlador : true
+}, {
+	id : 'app.detalle', // Pantalla detalle
+	url : '/detalle/:id',
+	vista : 'cuerpo',
+	controlador : true
+}
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-})
+];
 
-.config(function($stateProvider, $urlRouterProvider) {
+/**
+ * Configuramos las rutas dinámicamente.
+ */
+app.config(function($stateProvider, $urlRouterProvider, $injector,
+		$ionicConfigProvider) {
+	$urlRouterProvider.otherwise('/app/principal');
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
+	// console.log("Definiendo pantallas...");
+	// Nos recorremos el array de pantallas para configurar las rutas
+	for (var i = 0; i < pantallas.length; i++) {
+		p = pantallas[i].id.indexOf('.');
 
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
-  })
+		if (p != -1) {
+			// Pantallas normales.
+			subid = pantallas[i].id.substr(p + 1);
+			abstracta = false;
+			template = 'vistas/' + subid + '.html';
+			controlador = 'Ctrl' + subid.substr(0, 1).toUpperCase()
+					+ subid.substr(1);
+		} else {
+			// Pantalla abstracta. Normalmente vamos a tener sólo una en cada
+			// aplicación.
+			// La utilizaremos como contenedor principal, en el que tendremos un
+			// menú lateral y un contenido principal.
+			subid = pantallas[i].id;
+			abstracta = true;
+			template = 'vistas/' + subid + '.html';
+			controlador = 'Ctrl' + subid.substr(0, 1).toUpperCase()
+					+ subid.substr(1);
+		}
 
-  // Each tab has its own nav history stack:
+		if (abstracta)
+			$stateProvider.state(pantallas[i].id, {
+				url : '/' + subid,
+				abstract : true,
+				templateUrl : template,
+				controller : controlador
+			});
+		else {
+			s = "$stateProvider.state('" + pantallas[i].id + "',{\n"
+					+ "  url: '"
+					+ (pantallas[i].url ? pantallas[i].url : "/" + subid)
+					+ "',\n" + "  views: {" + "\n" + "    '"
+					+ pantallas[i].vista + "' : {" + "\n"
+					+ "      templateUrl: '" + template + "'";
 
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
+			if (pantallas[i].controlador)
+				s += ",\n      controller: '" + controlador.replace(".", "_")
+						+ "'";
+			s += "\n    }\n  }\n});";
+			eval(s);
+		}
+	}
 
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  });
-
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+	$ionicConfigProvider.backButton.previousTitleText(true);
 
 });

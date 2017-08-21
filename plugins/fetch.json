@@ -46,5 +46,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "fr.drangies.cordova.serial": {
+        "source": {
+            "type": "registry",
+            "id": "cordovarduino"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }
