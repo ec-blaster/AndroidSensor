@@ -59,7 +59,10 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 	};
 
 	$scope.selTipoSensor = function() {
-		alert("Hey");
+		var frm = document.forms['frmSensor'];
+		var idx = frm.tipoSensor.selectedIndex;
+		$scope.sensor.icono = $scope.tipos[idx].icono;
+		// alert();
 	};
 
 	$scope.$on('$destroy', function() {
