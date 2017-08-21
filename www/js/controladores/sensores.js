@@ -11,19 +11,27 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 		$scope.sensores = [ {
 			nombre : "Temperatura interior",
 			tipo : 'dht11_temp',
-			icono : 'ion-thermometer'
+			gpio : 1,
+			icono : 'ion-thermometer',
+			periodicidad : 5
 		}, {
 			nombre : "Temperatura exterior",
 			tipo : 'dht22_temp',
-			icono : 'ion-thermometer'
+			gpio : 2,
+			icono : 'ion-thermometer',
+			periodicidad : 5
 		}, {
 			nombre : "Humedad interior",
 			tipo : 'dht11_hum',
-			icono : 'ion-waterdrop'
+			gpio : 3,
+			icono : 'ion-waterdrop',
+			periodicidad : 10
 		}, {
 			nombre : "Humedad exterior",
 			tipo : 'dht22_hum',
-			icono : 'ion-waterdrop'
+			gpio : 4,
+			icono : 'ion-waterdrop',
+			periodicidad : 10
 		} ];
 	};
 
@@ -62,7 +70,6 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 		var frm = document.forms['frmSensor'];
 		var idx = frm.tipoSensor.selectedIndex;
 		$scope.sensor.icono = $scope.tipos[idx].icono;
-		// alert();
 	};
 
 	$scope.$on('$destroy', function() {
