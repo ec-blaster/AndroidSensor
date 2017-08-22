@@ -84,8 +84,9 @@ app
 								$rootScope.mqtt = datos;
 								if ($rootScope.mqtt == null)
 									$rootScope.mqtt = {};
+								$rootScope.$apply();
 							}, function() {
-								alert('Error al cargar configuración');
+								alert('Error al cargar configuración de MQTT');
 							});
 				}
 			};
@@ -103,11 +104,12 @@ app
 							.log("Cargamos configuración de sensores desde almacenamiento del sistema");
 					$rootScope.sensores = window.NativeStorage.getItem(
 							'sensores', function(datos) {
-								$rootScope.mqtt = datos;
+								$rootScope.sensores = datos;
 								if ($rootScope.sensores == null)
 									$rootScope.sensores = [];
-							}, function() {
-								alert('Error al cargar configuración');
+								$rootScope.$apply();
+							}, function(err) {
+								$rootScope.sensores = [];
 							});
 				}
 			};

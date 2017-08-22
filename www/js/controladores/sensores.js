@@ -42,6 +42,7 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal) {
 
 	$scope.cerrarSensor = function() {
 		if ($scope.nuevo) {
+			$scope.sensor.activo = true;
 			$rootScope.sensores[$rootScope.sensores.length] = $scope.sensor;
 		}
 		$scope.vDetalleSensor.hide();
