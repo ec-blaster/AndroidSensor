@@ -15,7 +15,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordovarduino"
+    "cordovarduino",
+    "cordova-plugin-nativestorage"
   ],
   "cordovaPlatforms": [
     "android"

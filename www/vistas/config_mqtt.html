@@ -3,27 +3,24 @@
 		<div class="list">
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Dirección servidor</span>
-		    <input type="text" placeholder="IP o nombre servidor">
+		    <input type="text" placeholder="IP o nombre servidor" ng-model="mqtt.servidor">
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Puerto</span>
-		    <input type="number" placeholder="1883">
+		    <input type="number" placeholder="1883" ng-model="mqtt.puerto">
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Usuario</span>
-		    <input type="text" placeholder="usuario">
+		    <input type="text" placeholder="usuario" ng-model="mqtt.usuario">
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Contraseña</span>
-		    <input type="password" placeholder="contraseña">
+		    <input type="password" placeholder="contraseña" ng-model="mqtt.password">
 		  </label>
-		  <ion-item class="item-divider">
-		  Sensores
-		  </ion-item>
 		</div>
 		<div class="button-bar">
-		  <a class="button button-positive">Guardar</a>
-		  <a class="button button-assertive">Cancelar</a>
+		  <button class="button button-positive" ng-click="guardar()">Guardar</button>
+		  <button class="button button-assertive" ng-click="volver()">Cancelar</button>
 		</div>
 	</ion-content>
 </ion-view>

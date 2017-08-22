@@ -76,5 +76,9 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 		$scope.vDetalleSensor.remove();
 	});
 
+	$scope.volver = function() {
+		window.history.back();
+	};
+
 	$scope.cargarSensores();
 });

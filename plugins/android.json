@@ -27,6 +27,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
         }
     },
     "dependent_plugins": {}
