@@ -94,10 +94,10 @@ app
 app.run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
 
-		navigator.NativeStorage.setItem('mqtt', "Kakita", function() {
-			alert('Configuración guardada');
-		}, function() {
-			alert('Error al guardar');
-		});
+		/*
+		 * window.NativeStorage.setItem('mqtt', "Kakita", function() {
+		 * alert('Configuración guardada'); }, function() { alert('Error al
+		 * guardar'); });
+		 */
 	});
 });
