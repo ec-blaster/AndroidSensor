@@ -1,39 +1,20 @@
 /**
  * Controlador de la configuración de sensores
  */
-app.controller("CtrlSensores", function($scope, $ionicModal) {
-	$scope.sensores = [];
+app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal) {
 	$scope.vDetalleSensor = null;
 	$scope.tipos = tiposSensores;
 	$scope.nuevo = false;
 
-	$scope.cargarSensores = function() {
-		$scope.sensores = [ {
-			nombre : "Temperatura interior",
-			tipo : 'dht11_temp',
-			gpio : 1,
-			icono : 'ion-thermometer',
-			periodicidad : 5
-		}, {
-			nombre : "Temperatura exterior",
-			tipo : 'dht22_temp',
-			gpio : 2,
-			icono : 'ion-thermometer',
-			periodicidad : 5
-		}, {
-			nombre : "Humedad interior",
-			tipo : 'dht11_hum',
-			gpio : 3,
-			icono : 'ion-waterdrop',
-			periodicidad : 10
-		}, {
-			nombre : "Humedad exterior",
-			tipo : 'dht22_hum',
-			gpio : 4,
-			icono : 'ion-waterdrop',
-			periodicidad : 10
-		} ];
-	};
+	/*
+	 * $scope.cargarSensores = function() { $rootScope.sensores = [ { nombre :
+	 * "Temperatura interior", tipo : 'dht11_temp', gpio : 1, icono :
+	 * 'ion-thermometer', periodicidad : 5 }, { nombre : "Temperatura exterior",
+	 * tipo : 'dht22_temp', gpio : 2, icono : 'ion-thermometer', periodicidad :
+	 * 5 }, { nombre : "Humedad interior", tipo : 'dht11_hum', gpio : 3, icono :
+	 * 'ion-waterdrop', periodicidad : 10 }, { nombre : "Humedad exterior", tipo :
+	 * 'dht22_hum', gpio : 4, icono : 'ion-waterdrop', periodicidad : 10 } ]; };
+	 */
 
 	$scope.nuevoSensor = function() {
 		$scope.sensor = {};
@@ -42,7 +23,7 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 	};
 
 	$scope.modificarSensor = function(id) {
-		$scope.sensor = $scope.sensores[id];
+		$scope.sensor = $rootScope.sensores[id];
 		$scope.nuevo = false;
 		$scope.abrirSensor();
 	};
@@ -61,7 +42,7 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 
 	$scope.cerrarSensor = function() {
 		if ($scope.nuevo) {
-			$scope.sensores[$scope.sensores.length] = $scope.sensor;
+			$rootScope.sensores[$rootScope.sensores.length] = $scope.sensor;
 		}
 		$scope.vDetalleSensor.hide();
 	};
@@ -76,9 +57,26 @@ app.controller("CtrlSensores", function($scope, $ionicModal) {
 		$scope.vDetalleSensor.remove();
 	});
 
+	$scope.guardar = function() {
+		if (typeof (window.NativeStorage) == "undefined") {
+			console.log("Guardamos sensores en almacenamiento local");
+			localStorage.setItem("sensores", angular
+					.toJson($rootScope.sensores));
+			window.history.back();
+		} else {
+			console.log("Guardamos sensores en almacenamiento del sistema");
+			window.NativeStorage.setItem('sensores', $rootScope.sensores,
+					function() {
+						window.history.back();
+					}, function() {
+						alert('Error al guardar');
+					});
+		}
+	}
+
 	$scope.volver = function() {
 		window.history.back();
 	};
 
-	$scope.cargarSensores();
+	// $scope.cargarSensores();
 });

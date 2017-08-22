@@ -74,12 +74,16 @@ app
 							.log("Cargamos configuración de MQTT desde almacenamiento local");
 					$rootScope.mqtt = angular.fromJson(localStorage
 							.getItem("mqtt"));
+					if ($rootScope.mqtt == null)
+						$rootScope.mqtt = {};
 				} else {
 					console
 							.log("Cargamos configuración de MQTT desde almacenamiento del sistema");
 					$rootScope.mqtt = window.NativeStorage.getItem('mqtt',
 							function(datos) {
 								$rootScope.mqtt = datos;
+								if ($rootScope.mqtt == null)
+									$rootScope.mqtt = {};
 							}, function() {
 								alert('Error al cargar configuración');
 							});
@@ -92,12 +96,16 @@ app
 							.log("Cargamos configuración de sensores desde almacenamiento local");
 					$rootScope.sensores = angular.fromJson(localStorage
 							.getItem("sensores"));
+					if ($rootScope.sensores == null)
+						$rootScope.sensores = [];
 				} else {
 					console
 							.log("Cargamos configuración de sensores desde almacenamiento del sistema");
 					$rootScope.sensores = window.NativeStorage.getItem(
 							'sensores', function(datos) {
 								$rootScope.mqtt = datos;
+								if ($rootScope.sensores == null)
+									$rootScope.sensores = [];
 							}, function() {
 								alert('Error al cargar configuración');
 							});

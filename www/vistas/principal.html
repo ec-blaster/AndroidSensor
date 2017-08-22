@@ -24,6 +24,11 @@
 			<ion-item class="item-divider">
 			Sensores definidos
 			</ion-item>
+			<ion-item class="item-icon-left" ng-repeat="sensor in sensores">
+				<i class="icon {{sensor.icono}}"></i>
+				<h2>{{sensor.nombre}}</h2>
+				GPIO{{sensor.gpio}} / {{sensor.periodicidad}} segundos
+			</ion-item>
 		</div>
 	</ion-content>
 </ion-view>
