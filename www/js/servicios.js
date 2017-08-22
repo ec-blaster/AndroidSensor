@@ -15,6 +15,7 @@ app.factory('MQTT', function($rootScope, $q, $ionicLoading) {
 			host : host,
 			port : puerto,
 			clientId : 'loquesea',
+			timeout : 2,
 			username : usuario,
 			password : password,
 			reconnect : 5000
