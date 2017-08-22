@@ -2,9 +2,6 @@
  * Controlador de la configuración de sensores
  */
 app.controller("CtrlConfig_mqtt", function($scope) {
-
-	$scope.mqtt = {};
-
 	$scope.cargarConfig = function() {
 
 	};
@@ -14,10 +11,11 @@ app.controller("CtrlConfig_mqtt", function($scope) {
 		if (typeof (window.NativeStorage) == "undefined") {
 			console.log("Guardamos en almacenamiento local");
 			localStorage.setItem("mqtt", angular.toJson($scope.mqtt));
+			window.history.back();
 		} else {
 			console.log("Guardamos en almacenamiento del sistema");
 			window.NativeStorage.setItem('mqtt', $scope.mqtt, function() {
-				alert('Configuración guardada');
+				window.history.back();
 			}, function() {
 				alert('Error al guardar');
 			});

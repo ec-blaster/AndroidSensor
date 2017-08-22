@@ -34,46 +34,21 @@ var pantallas = [ /*
  * Configuramos las rutas dinámicamente.
  */
 app
-		.config(function($stateProvider, $urlRouterProvider, $injector,
+		.config(function($stateProvider, $urlRouterProvider,
 				$ionicConfigProvider) {
 			$urlRouterProvider.otherwise('/principal');
 
-			// console.log("Definiendo pantallas...");
 			// Nos recorremos el array de pantallas para configurar las rutas
 			for (var i = 0; i < pantallas.length; i++) {
-				p = pantallas[i].id.indexOf('.');
+				id = pantallas[i].id;
+				abstracta = true;
+				template = 'vistas/' + id + '.html';
+				controlador = 'Ctrl' + id.substr(0, 1).toUpperCase()
+						+ id.substr(1);
 
-				if (p != -1) {
-					// Pantallas normales.
-					subid = pantallas[i].id.substr(p + 1);
-					abstracta = false;
-					template = 'vistas/' + subid + '.html';
-					controlador = 'Ctrl' + subid.substr(0, 1).toUpperCase()
-							+ subid.substr(1);
-				} else {
-					// Pantalla abstracta. Normalmente vamos a tener sólo una en
-					// cada
-					// aplicación.
-					// La utilizaremos como contenedor principal, en el que
-					// tendremos un
-					// menú lateral y un contenido principal.
-					subid = pantallas[i].id;
-					abstracta = true;
-					template = 'vistas/' + subid + '.html';
-					controlador = 'Ctrl' + subid.substr(0, 1).toUpperCase()
-							+ subid.substr(1);
-				}
-
-				// console.log(template);
-
-				/*
-				 * if (abstracta) $stateProvider.state(pantallas[i].id, { url :
-				 * '/' + subid, abstract : true, templateUrl : template,
-				 * controller : controlador }); else {
-				 */
 				s = "$stateProvider.state('" + pantallas[i].id + "',{\n"
 						+ "  url: '"
-						+ (pantallas[i].url ? pantallas[i].url : "/" + subid)
+						+ (pantallas[i].url ? pantallas[i].url : "/" + id)
 						+ "',\n" + "  views: {" + "\n" + "    '"
 						+ pantallas[i].vista + "' : {" + "\n"
 						+ "      templateUrl: '" + template + "'";
@@ -82,22 +57,65 @@ app
 					s += ",\n      controller: '"
 							+ controlador.replace(".", "_") + "'";
 				s += "\n    }\n  }\n});";
-				// console.log(s);
 				eval(s);
-				/* } */
 			}
 
 			$ionicConfigProvider.backButton.previousTitleText(true);
 
 		});
 
-app.run(function($ionicPlatform) {
-	$ionicPlatform.ready(function() {
+app
+		.run(function($ionicPlatform, $rootScope) {
+			$rootScope.mqtt = {};
+			$rootScope.sensores = [];
+			$rootScope.cargarMQTT = function() {
+				if (typeof (window.NativeStorage) == "undefined") {
+					console
+							.log("Cargamos configuración de MQTT desde almacenamiento local");
+					$rootScope.mqtt = angular.fromJson(localStorage
+							.getItem("mqtt"));
+				} else {
+					console
+							.log("Cargamos configuración de MQTT desde almacenamiento del sistema");
+					$rootScope.mqtt = window.NativeStorage.getItem('mqtt',
+							function(datos) {
+								$rootScope.mqtt = datos;
+							}, function() {
+								alert('Error al cargar configuración');
+							});
+				}
+			};
 
-		/*
-		 * window.NativeStorage.setItem('mqtt', "Kakita", function() {
-		 * alert('Configuración guardada'); }, function() { alert('Error al
-		 * guardar'); });
-		 */
-	});
-});
+			$rootScope.cargarSensores = function() {
+				if (typeof (window.NativeStorage) == "undefined") {
+					console
+							.log("Cargamos configuración de sensores desde almacenamiento local");
+					$rootScope.sensores = angular.fromJson(localStorage
+							.getItem("sensores"));
+				} else {
+					console
+							.log("Cargamos configuración de sensores desde almacenamiento del sistema");
+					$rootScope.sensores = window.NativeStorage.getItem(
+							'sensores', function(datos) {
+								$rootScope.mqtt = datos;
+							}, function() {
+								alert('Error al cargar configuración');
+							});
+				}
+			};
+
+			$rootScope.cargarConfig = function() {
+				$rootScope.cargarMQTT();
+				$rootScope.cargarSensores();
+			};
+
+			$ionicPlatform.ready(function() {
+
+				/*
+				 * window.NativeStorage.setItem('mqtt', "Kakita", function() {
+				 * alert('Configuración guardada'); }, function() { alert('Error
+				 * al guardar'); });
+				 */
+				$rootScope.cargarConfig();
+			});
+		});
