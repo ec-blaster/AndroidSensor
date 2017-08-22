@@ -1,7 +1,8 @@
 /**
  * Controlador de la pantalla principal
  */
-app.controller("CtrlPrincipal", function($scope, $ionicPopover) {
+app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
+		MQTT) {
 	$scope.estado = {
 		mqtt : false,
 		arduinoCon : false,
@@ -34,7 +35,13 @@ app.controller("CtrlPrincipal", function($scope, $ionicPopover) {
 	$scope.iniciarDetener = function() {
 		$scope.estado.servicio = !$scope.estado.servicio;
 		if ($scope.estado.servicio) {
-
+			MQTT.conectar($rootScope.mqtt.servidor, $rootScope.mqtt.puerto,
+					$rootScope.mqtt.usuario, $rootScope.mqtt.password).then(
+					function() {
+						alert("Conectado");
+					}, function() {
+						alert("No conectado");
+					})
 		} else {
 			$scope.estado.mqtt = false;
 			$scope.estado.arduinoCon = false;
