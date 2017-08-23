@@ -2,7 +2,7 @@
  * Controlador de la pantalla principal
  */
 app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
-		MQTT) {
+		MqttClient) {
 	$scope.estado = {
 		mqtt : false,
 		arduinoCon : false,
@@ -32,16 +32,31 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 		$scope.menu.remove();
 	});
 
+	$scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
+		var id = "test";
+
+		console.log("Conectando con el broker " + servidor + " con el usuario "
+				+ usr);
+		MqttClient.init(servidor, puerto, id);
+		MqttClient.connect({
+			onSuccess : $scope.conectado
+		});
+	};
+
+	$scope.conectado = function() {
+		var topico = "sion/pruebas";
+		MqttClient.subscribe(topico);
+		message = new Paho.MQTT.Message("Hola");
+		message.destinationName = topico;
+		MqttClient.send(message);
+	};
+
 	$scope.iniciarDetener = function() {
 		$scope.estado.servicio = !$scope.estado.servicio;
 		if ($scope.estado.servicio) {
-			MQTT.conectar($rootScope.mqtt.servidor, $rootScope.mqtt.puerto,
-					$rootScope.mqtt.usuario, $rootScope.mqtt.password).then(
-					function() {
-						alert("Conectado");
-					}, function() {
-						alert("No conectado");
-					})
+			$scope.conectarMQTT($rootScope.mqtt.servidor,
+					$rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
+					$rootScope.mqtt.password);
 		} else {
 			$scope.estado.mqtt = false;
 			$scope.estado.arduinoCon = false;
