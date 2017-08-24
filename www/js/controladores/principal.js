@@ -2,13 +2,15 @@
  * Controlador de la pantalla principal
  */
 app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
-		$cordovaDevice, MqttClient) {
+		$ionicPopup, $cordovaDevice, MqttClient) {
 	$scope.estado = {
 		mqtt : false,
 		arduinoCon : false,
 		arduinoIni : false,
 		servicio : false
 	};
+
+	$scope.conectando = false;
 
 	// Definimos un menú popover:
 	$ionicPopover.fromTemplateUrl('vistas/menu.html', {
@@ -46,6 +48,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 
 	// Conectamos con el servidor
 	$scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
+		$scope.conectando = true;
 		console.log("Conectando con el broker " + servidor + " con el usuario "
 				+ usr);
 		MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
@@ -54,19 +57,33 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 			onFailure : function(err) {
 				console.log("Error de conexión: " + err.errorMessage);
 				$scope.estado.servicio = false;
-				alert("Error de conexión: " + err.errorMessage);
+				$scope.inicializarMarcadores();
+				$ionicPopup.alert({
+					title : 'Error de conexión',
+					template : err.errorMessage
+				});
 			}
 		});
 	};
 
 	// Hemos conectado con el servidor MQTT
 	$scope.MQTTconectado = function() {
+		$scope.conectando = false;
 		console.log("Conectado con " + $rootScope.mqtt.servidor);
-		var topico = "sion/pruebas";
-		MqttClient.subscribe(topico);
-		message = new Paho.MQTT.Message("Hola");
-		message.destinationName = topico;
-		MqttClient.send(message);
+		$scope.estado.mqtt = true;
+		$scope.$apply();
+		/*
+		 * var topico = "sion/pruebas"; MqttClient.subscribe(topico); message =
+		 * new Paho.MQTT.Message("Hola"); message.destinationName = topico;
+		 * MqttClient.send(message);
+		 */
+	};
+
+	$scope.inicializarMarcadores = function() {
+		$scope.estado.mqtt = false;
+		$scope.estado.arduinoCon = false;
+		$scope.estado.arduinoIni = false;
+		$scope.conectando = false;
 	};
 
 	$scope.iniciarDetener = function() {
@@ -76,9 +93,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 					$rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
 					$rootScope.mqtt.password);
 		} else {
-			$scope.estado.mqtt = false;
-			$scope.estado.arduinoCon = false;
-			$scope.estado.arduinoIni = false;
+			$scope.inicializarMarcadores();
+			MqttClient.disconnect();
 		}
 	};
 });

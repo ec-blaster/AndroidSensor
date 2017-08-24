@@ -6,6 +6,10 @@
 		margin-right: 25%;
 		width: 50% !important;
   }
+  .spinner svg {
+	  width: 16px !important;
+	  height: 16px !important;
+  }
 	</style>
 	<ion-nav-buttons side="right">
     <button class="button button-clear" ng-click="mostrarMenu($event)">
@@ -14,13 +18,22 @@
   </ion-nav-buttons>
   <ion-content>
 		<div class="list">
-		  <center><button class="button button-block boton-centrado {{ estado.servicio ? 'button-assertive' : 'button-positive'}}" ng-click="iniciarDetener()">{{ estado.servicio ? "Detener": "Iniciar"}}</button></center>
+		  <center><button class="button button-block boton-centrado {{ estado.servicio ? 'button-assertive' : 'button-positive'}}" ng-click="iniciarDetener()" ng-disabled="conectando">{{ estado.servicio ? "Detener": "Iniciar"}}</button></center>
 		  <ion-item class="item-divider">
 			Estado
 			</ion-item>
-			<ion-toggle ng-model="estado.mqtt" ng-disabled="true">MQTT</ion-toggle>
-		  <ion-toggle ng-model="estado.arduinoCon" ng-disabled="true">Arduino conectado</ion-toggle>
-		  <ion-toggle ng-model="estado.arduinoIni" ng-disabled="true">Arduino inicializado</ion-toggle>
+			<ion-toggle ng-model="estado.mqtt" ng-disabled="true">
+			<ion-spinner icon="ios" class="spinner-positive" ng-show="conectando && !estado.mqtt"></ion-spinner>
+			MQTT
+			</ion-toggle>
+		  <ion-toggle ng-model="estado.arduinoCon" ng-disabled="true">
+		  <ion-spinner icon="ios" class="spinner-positive" ng-show="conectando && !estado.arduinoCon"></ion-spinner>
+		  Arduino conectado
+		  </ion-toggle>
+		  <ion-toggle ng-model="estado.arduinoIni" ng-disabled="true">
+		  <ion-spinner icon="ios" class="spinner-positive" ng-show="conectando && !estado.arduinoIni"></ion-spinner>
+		  Arduino inicializado
+		  </ion-toggle>
 			<ion-item class="item-divider">
 			Sensores definidos
 			</ion-item>
