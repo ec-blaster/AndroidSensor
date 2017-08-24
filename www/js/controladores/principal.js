@@ -59,7 +59,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 				$scope.estado.servicio = false;
 				$scope.inicializarMarcadores();
 				$ionicPopup.alert({
-					title : 'Error de conexión',
+					title : 'Error de conexión MQTT',
 					template : err.errorMessage
 				});
 			}
@@ -72,11 +72,50 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 		console.log("Conectado con " + $rootScope.mqtt.servidor);
 		$scope.estado.mqtt = true;
 		$scope.$apply();
-		/*
-		 * var topico = "sion/pruebas"; MqttClient.subscribe(topico); message =
-		 * new Paho.MQTT.Message("Hola"); message.destinationName = topico;
-		 * MqttClient.send(message);
-		 */
+
+		var topico = "sion/pruebas";
+		MqttClient.subscribe(topico);
+		message = new Paho.MQTT.Message("Hola");
+		message.destinationName = topico;
+		MqttClient.send(message);
+
+		$scope.conectarSerie();
+	};
+
+	// Nos conectamos al puerto serie del arduino (USB OTG)
+	$scope.conectarSerie = function() {
+		if (typeof (window.serial) != "undefined") {
+			// Pedimos permiso para conectarnos al puerto serie
+			console.log('Solicitando permiso para USB...');
+			window.serial.requestPermission(function() {
+				// Hemos obtenido permiso
+				console.log('Permiso concedido');
+				var opc = {
+					baudRate : 9600,
+					sleepOnPause : true
+				// Mantenemos el puerto abierto cuando la app pasa a 2º plano
+				};
+
+				// Nos conectamos
+				console.log('Abriendo puerto serie...');
+				window.serial.open(opc, function() {
+					console.log('Puerto abierto');
+					window.serial.close(function() {
+						console.log('Puerto cerrado');
+					}, $scope.errorSerie);
+				}, $scope.errorSerie);
+			}, $scope.errorSerie);
+		} else
+			$scope.errorSerie("Dispositivo serie no disponible");
+
+	};
+
+	$scope.errorSerie = function(err) {
+		console.log(err);
+		$ionicPopup.alert({
+			title : 'Error de conexión USB',
+			template : err
+		});
 	};
 
 	$scope.inicializarMarcadores = function() {
@@ -89,9 +128,12 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 	$scope.iniciarDetener = function() {
 		$scope.estado.servicio = !$scope.estado.servicio;
 		if ($scope.estado.servicio) {
-			$scope.conectarMQTT($rootScope.mqtt.servidor,
-					$rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
-					$rootScope.mqtt.password);
+			$scope.conectarSerie();
+			/*
+			 * $scope.conectarMQTT($rootScope.mqtt.servidor,
+			 * $rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
+			 * $rootScope.mqtt.password);
+			 */
 		} else {
 			$scope.inicializarMarcadores();
 			MqttClient.disconnect();
