@@ -2,7 +2,7 @@
  * Controlador de la pantalla principal
  */
 app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
-		MqttClient) {
+		$cordovaDevice, MqttClient) {
 	$scope.estado = {
 		mqtt : false,
 		arduinoCon : false,
@@ -32,6 +32,17 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 		$scope.menu.remove();
 	});
 
+	// Obtenemos un ID único del dispositivo
+	$scope.getIdDispositivo = function() {
+		var id = "";
+		if (window.device)
+			id = $cordovaDevice.getUUID();
+		else
+			id = CryptoJS.MD5(window.navigator.userAgent).toString(
+					CryptoJS.enc.Hex);
+	};
+
+	// Conectamos con el servidor
 	$scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
 		var id = "test";
 
