@@ -18,7 +18,7 @@
   </ion-nav-buttons>
   <ion-content>
 		<div class="list">
-		  <center><button class="button button-block boton-centrado {{ estado.servicio ? 'button-assertive' : 'button-positive'}}" ng-click="iniciarDetener()" ng-disabled="conectando">{{ estado.servicio ? "Detener": "Iniciar"}}</button></center>
+		  <center><button class="button button-block boton-centrado {{ conectando ? 'button-energized' : (estado.servicio ? 'button-assertive': 'button-positive') }}" ng-click="iniciarDetener()">{{ conectando ? 'Cancelar' : (estado.servicio ? 'Detener': 'Iniciar') }}</button></center>
 		  <ion-item class="item-divider">
 			Estado
 			</ion-item>

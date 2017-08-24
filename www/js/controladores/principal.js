@@ -11,6 +11,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 	};
 
 	$scope.conectando = false;
+	$scope.conectandoMQTT = false;
 
 	// Definimos un menú popover:
 	$ionicPopover.fromTemplateUrl('vistas/menu.html', {
@@ -48,16 +49,16 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 
 	// Conectamos con el servidor
 	$scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
-		$scope.conectando = true;
+
 		console.log("Conectando con el broker " + servidor + " con el usuario "
 				+ usr);
 		MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
+		$scope.conectandoMQTT = true;
 		MqttClient.connect({
 			onSuccess : $scope.MQTTconectado,
 			onFailure : function(err) {
 				console.log("Error de conexión: " + err.errorMessage);
-				$scope.estado.servicio = false;
-				$scope.inicializarMarcadores();
+				$scope.desconectarTodo();
 				$ionicPopup.alert({
 					title : 'Error de conexión MQTT',
 					template : err.errorMessage
@@ -68,16 +69,16 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 
 	// Hemos conectado con el servidor MQTT
 	$scope.MQTTconectado = function() {
-		$scope.conectando = false;
 		console.log("Conectado con " + $rootScope.mqtt.servidor);
+		$scope.conectandoMQTT = false;
 		$scope.estado.mqtt = true;
 		$scope.$apply();
 
-		var topico = "sion/pruebas";
-		MqttClient.subscribe(topico);
-		message = new Paho.MQTT.Message("Hola");
-		message.destinationName = topico;
-		MqttClient.send(message);
+		/*
+		 * var topico = "sion/pruebas"; MqttClient.subscribe(topico); message =
+		 * new Paho.MQTT.Message("Hola"); message.destinationName = topico;
+		 * MqttClient.send(message);
+		 */
 
 		$scope.conectarSerie();
 	};
@@ -100,9 +101,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 				console.log('Abriendo puerto serie...');
 				window.serial.open(opc, function() {
 					console.log('Puerto abierto');
-					window.serial.close(function() {
-						console.log('Puerto cerrado');
-					}, $scope.errorSerie);
+					$scope.todoConectado();
 				}, $scope.errorSerie);
 			}, $scope.errorSerie);
 		} else
@@ -112,31 +111,48 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 
 	$scope.errorSerie = function(err) {
 		console.log(err);
+		$scope.desconectarTodo();
 		$ionicPopup.alert({
 			title : 'Error de conexión USB',
 			template : err
 		});
 	};
 
-	$scope.inicializarMarcadores = function() {
+	$scope.todoConectado = function() {
+		$scope.conectando = false;
+		$scope.estado.servicio = true;
+	};
+
+	$scope.desconectarTodo = function() {
+		if ($scope.estado.mqtt || $scope.conectandoMQTT) {
+			console.log('Desconectamos MQTT');
+			MqttClient.disconnect();
+		}
+
+		if ($scope.estado.arduinoCon) {
+			console.log('Cerramos puerto serie');
+			window.serial.close(function() {
+				console.log('Puerto cerrado');
+			}, function() {
+			});
+		}
+
 		$scope.estado.mqtt = false;
 		$scope.estado.arduinoCon = false;
 		$scope.estado.arduinoIni = false;
 		$scope.conectando = false;
+		$scope.conectandoMQTT = false;
+		$scope.estado.servicio = false;
 	};
 
 	$scope.iniciarDetener = function() {
-		$scope.estado.servicio = !$scope.estado.servicio;
-		if ($scope.estado.servicio) {
-			$scope.conectarSerie();
-			/*
-			 * $scope.conectarMQTT($rootScope.mqtt.servidor,
-			 * $rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
-			 * $rootScope.mqtt.password);
-			 */
+		if ($scope.conectando || $scope.estado.servicio) {
+			$scope.desconectarTodo();
 		} else {
-			$scope.inicializarMarcadores();
-			MqttClient.disconnect();
+			$scope.conectando = true;
+			$scope.conectarMQTT($rootScope.mqtt.servidor,
+					$rootScope.mqtt.puerto, $rootScope.mqtt.usuario,
+					$rootScope.mqtt.password);
 		}
 	};
 });
