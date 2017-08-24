@@ -2,7 +2,8 @@
  * app.js Definición general del funcionamiento de la aplicación
  */
 
-var app = angular.module('androidSensor', [ 'ionic', 'angularPaho' ]);
+var app = angular.module('androidSensor',
+		[ 'ionic', 'ngCordova', 'angularPaho' ]);
 
 /**
  * Definimos las pantallas de la aplicación. Para cada pantalla, indicaremos al
