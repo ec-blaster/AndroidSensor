@@ -40,21 +40,28 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 		else
 			id = CryptoJS.MD5(window.navigator.userAgent).toString(
 					CryptoJS.enc.Hex);
+
+		return 'android_' + id;
 	};
 
 	// Conectamos con el servidor
 	$scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
-		var id = "test";
-
 		console.log("Conectando con el broker " + servidor + " con el usuario "
 				+ usr);
-		MqttClient.init(servidor, puerto, id);
+		MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
 		MqttClient.connect({
-			onSuccess : $scope.conectado
+			onSuccess : $scope.MQTTconectado,
+			onFailure : function(err) {
+				console.log("Error de conexión: " + err.errorMessage);
+				$scope.estado.servicio = false;
+				alert("Error de conexión: " + err.errorMessage);
+			}
 		});
 	};
 
-	$scope.conectado = function() {
+	// Hemos conectado con el servidor MQTT
+	$scope.MQTTconectado = function() {
+		console.log("Conectado con " + $rootScope.mqtt.servidor);
 		var topico = "sion/pruebas";
 		MqttClient.subscribe(topico);
 		message = new Paho.MQTT.Message("Hola");

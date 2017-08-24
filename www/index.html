@@ -21,6 +21,9 @@
 <script src="lib/paho-mqtt-js/mqttws31.js"></script>
 <script src="lib/angular-paho/dist/angular-paho.js"></script>
 
+<!-- Librería crypto-js (https://code.google.com/archive/p/crypto-js/) -->
+<script src="lib/cryptojslib/rollups/md5.js"></script>
+
 <!-- cordova script (this will be a 404 during development) -->
 <script src="cordova.js"></script>
 
@@ -38,12 +41,9 @@
 <script src="js/controladores/sensores.js"></script>
 </head>
 <body ng-app="androidSensor">
-  <ion-nav-bar class="bar-balanced">
-  	<ion-nav-back-button class="button-clear">
-  		<i class="ion-arrow-left-c"></i>Volver
-  	</ion-nav-back-button>
-		</ion-nav-bar>
-	<ion-nav-view name="cuerpo">
-	</ion-nav-view>
+	<ion-nav-bar class="bar-balanced"> <ion-nav-back-button
+		class="button-clear"> <i
+		class="ion-arrow-left-c"></i>Volver </ion-nav-back-button> </ion-nav-bar>
+	<ion-nav-view name="cuerpo"> </ion-nav-view>
 </body>
 </html>
