@@ -55,6 +55,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 		MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
 		$scope.conectandoMQTT = true;
 		MqttClient.connect({
+			timeout : 5,
 			onSuccess : $scope.MQTTconectado,
 			onFailure : function(err) {
 				console.log("Error de conexión: " + err.errorMessage);
@@ -126,7 +127,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover,
 	$scope.desconectarTodo = function() {
 		if ($scope.estado.mqtt || $scope.conectandoMQTT) {
 			console.log('Desconectamos MQTT');
-			MqttClient.disconnect();
+			if (MqttClient.connected)
+				MqttClient.disconnect();
 		}
 
 		if ($scope.estado.arduinoCon) {
