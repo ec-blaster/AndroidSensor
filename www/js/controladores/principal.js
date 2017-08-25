@@ -169,7 +169,13 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
 
   $scope.inicializacionArduino = function() {
     console.log('Enviamos la inicialización al Arduino');
-    $scope.enviarComandoArduino(CMD_INIT, "14=DHT11");
+    var parm = "";
+    for (var i = 0; i < $rootScope.sensores.length; i++) {
+      if (i > 0)
+        parm += ",";
+      parm += $rootScope.sensores[i].gpio + "=" + $rootScope.tipo;
+    }
+    $scope.enviarComandoArduino(CMD_INIT, parm);
   };
 
   $scope.arduinoInicializado = function() {
@@ -220,8 +226,15 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     if ($scope.conectando || $scope.estado.servicio) {
       $scope.desconectarTodo();
     } else {
-      $scope.conectando = true;
-      $scope.conectarMQTT($rootScope.mqtt.servidor, $rootScope.mqtt.puerto, $rootScope.mqtt.usuario, $rootScope.mqtt.password);
+      if ($rootScope.sensores.length == 0) {
+        $ionicPopup.alert({
+          title : 'Error',
+          template : 'No hay ningún sensor definido. Debe definir al menos uno'
+        });
+      } else {
+        $scope.conectando = true;
+        $scope.conectarMQTT($rootScope.mqtt.servidor, $rootScope.mqtt.puerto, $rootScope.mqtt.usuario, $rootScope.mqtt.password);
+      }
     }
   };
 });
