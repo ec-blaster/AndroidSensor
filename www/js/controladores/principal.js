@@ -133,7 +133,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
 
   $scope.procesarComando = function(cadena) {
     comando = "";
-    params = "";
+    parametros = "";
 
     var sep = cadena.indexOf(' ');
     if (sep != -1) {
@@ -146,10 +146,14 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       console.log("<= COMANDO: " + comando);
       console.log("<= PARAMETROS: " + parametros);
 
-      if (comando == CMD_INITREQ)
+      if (comando == CMD_INITREQ) {
+        // Arduino nos pide inicialización
         $scope.inicializacionArduino();
-      else if (comando == CMD_INITOK)
+      } else if (comando == CMD_INITOK) {
+        // Arduino nos notifica que todo está inicializado
         $scope.arduinoInicializado();
+      } else if (comando == CMD_ERROR)
+        $scope.errorSerie("Error de Arduino: " + parametros);
     } else
       console.log(cadena);
   };
