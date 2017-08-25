@@ -157,9 +157,6 @@ app
 																					function() {
 																						errorSerie("Error al registrar lecturas");
 																					});
-
-																	$scope
-																			.todoConectado();
 																},
 																$scope.errorSerie);
 											}, $scope.errorSerie);
@@ -187,6 +184,8 @@ app
 
 							if (comando.equals(CMD_INITREQ))
 								$scope.inicializacionArduino();
+							else if (comando.equals(CMD_INITOK))
+								$scope.arduiniInicializado();
 						} else
 							console.log("Comando no reconocido");
 					};
@@ -194,7 +193,13 @@ app
 					$scope.inicializacionArduino = function() {
 						console.log('Enviamos la inicialización al Arduino');
 						window.serial.write(CMD_INIT + "14=DHT11");
-					}
+					};
+
+					$scope.arduinoInicializado = function() {
+						console.log('Arduino inicializado correctamente');
+						$scope.estado.arduinoIni = true;
+						$scope.todoConectado();
+					};
 
 					$scope.errorSerie = function(err) {
 						console.log(err);
