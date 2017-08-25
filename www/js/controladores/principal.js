@@ -142,7 +142,7 @@ app
 																							for (var i = 0; i < view.length; i++) {
 																								if (view[i] == 10) {
 																									$scope
-																											.comandoRecibido($scope.strRecibida);
+																											.procesarComando($scope.strRecibida);
 																									$scope.strRecibida = '';
 																								} else {
 																									var temp_str = String
@@ -169,9 +169,32 @@ app
 
 					};
 
-					$scope.comandoRecibido = function(comando) {
-						console.log('Comando recibido: ' + comando);
+					$scope.procesarComando = function(cadena) {
+						comando = "";
+						params = "";
+						console.log("RECIBIDO: " + cadena);
+
+						var sep = cadena.indexOf(' ');
+						if (sep != -1) {
+							comando = cadena.substring(0, sep);
+							params = cadena.substring(1 + sep);
+						} else
+							comando = cadena;
+
+						if (comando.startsWith("AS_")) {
+							console.log("COMANDO: " + comando);
+							console.log("PARAMETROS: " + params);
+
+							if (comando.equals(CMD_INITREQ))
+								$scope.inicializacionArduino();
+						} else
+							console.log("Comando no reconocido");
 					};
+
+					$scope.inicializacionArduino = function() {
+						console.log('Enviamos la inicialización al Arduino');
+						window.serial.write(CMD_INIT + "14=DHT11");
+					}
 
 					$scope.errorSerie = function(err) {
 						console.log(err);
