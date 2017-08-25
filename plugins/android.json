@@ -13,6 +13,9 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
         },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
         },
@@ -26,9 +29,6 @@
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "org.iabsoft.androidSensor"
-        },
-        "cordova-plugin-nativestorage": {
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
         }
     },
