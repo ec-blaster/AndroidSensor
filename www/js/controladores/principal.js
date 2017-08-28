@@ -8,6 +8,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     arduinoIni : false,
     servicio : false
   };
+  $scope.lecturas = [];
+  $scope.cronometro = null;
 
   $scope.strRecibida = '';
 
@@ -66,7 +68,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         $ionicPopup.alert({
           title : 'Error de conexión MQTT',
           template : err.errorMessage,
-          cssClass: 'error'
+          cssClass : 'error'
         });
       }
     });
@@ -170,6 +172,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       } else if (comando == CMD_INITOK) {
         // Arduino nos notifica que todo está inicializado
         $scope.arduinoInicializado();
+      } else if (comando == CMD_READOK) {
+        // Arduino nos envía los datos de un sensor que le hemos pedido previamente
+        $scope.sensorLeido(parametros);
       } else if (comando == CMD_ERROR)
         $scope.errorSerie("Error de Arduino: " + parametros);
     } else
@@ -220,7 +225,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $ionicPopup.alert({
       title : 'Error de conexión USB',
       template : err,
-      cssClass: 'error'
+      cssClass : 'error'
     });
   };
 
@@ -235,12 +240,78 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.conectando = false;
     $scope.estado.servicio = true;
     $scope.$apply();
+    $scope.iniciarLecturas();
+  };
+
+  /**
+   * Inicializamos los datos de lecturas de todos los sensores definidos
+   */
+  $scope.iniciarLecturas = function() {
+
+    // Inicializamos el array de lecturas con el tiempo que queda para la siguiente lectura y el valor actual del sensor
+    $scope.lecturas = [];
+    for (var i = 0; i < $rootScope.sensores.length; i++) {
+      var elem = {
+        restante : 0,
+        valor : null
+      };
+      $scope.lecturas[i] = elem;
+    }
+
+    $scope.comprobarSensores();
+  };
+
+  /**
+   * Comprobamos si hay que leer algún sensor, descontamos y reprogramamos de nuevo el cronómetro
+   */
+  $scope.comprobarSensores = function() {
+    for (var i = 0; i < $scope.lecturas.length; i++) {
+      if ($scope.lecturas[i].restante == 0) {
+        // Leemos el valor del sensor (de forma asíncrona)
+        $scope.enviarComandoArduino(CMD_READ, i);
+
+        // Reiniciamos el contador de este sensor
+        $scope.lecturas[i].restante == $rootScope.sensores[i].periodicidad;
+      } else
+        $scope.lecturas[i].restante--;
+    }
+
+    $scope.cronometro = $timeout($scope.comprobarSensores, 1000);
+  }
+
+  /**
+   * Obtenemos los datos de un sensor
+   */
+  $scope.sensorLeido = function(params) {
+    // 1.- Obtenemos de los parámetros el número de sensor y el valor leído
+    var idSensor = -1;
+    var valor = -1;
+    var sep = params.indexOf(' ');
+    if (sep != -1) {
+      idSensor = params.substring(0, sep);
+      valor = params.substring(1 + sep);
+    } else {
+      idSensor = params;
+      valor = 0;
+    }
+
+    // 2.- Actualizamos el valor en el array de lecturas
+    $scope.lecturas[idSensor].valor = valor;
+    
+    // 3.- Lo enviamos al tópico MQTT asociado
+    
   };
 
   /**
    * Se invoca para cerrar todas las conexiones
    */
   $scope.desconectarTodo = function() {
+    if ($scope.cronometro != null) {
+      console.log('Detenemos las lecturas');
+      $timeout.cancel($scope.cronometro);
+      $scope.cronometro = null;
+    }
+
     if ($scope.estado.mqtt || $scope.conectandoMQTT) {
       console.log('Desconectamos MQTT');
       if (MqttClient.connected)
@@ -274,7 +345,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         $ionicPopup.alert({
           title : 'Error',
           template : 'No hay ningún sensor definido. Debe definir al menos uno',
-          cssClass: 'error'
+          cssClass : 'error'
         });
       } else {
         $scope.conectando = true;
@@ -282,4 +353,12 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       }
     }
   };
+
+  /**
+   * Cancelamos el cronómetro si aún está activo
+   */
+  $scope.$on("$destroy", function() {
+    if ($scope.cronometro != null)
+      $timeout.cancel($scope.cronometro);
+  });
 });

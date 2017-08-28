@@ -1,7 +1,7 @@
 /**
  * Controlador de la configuración de sensores
  */
-app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal) {
+app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicPopup) {
   $scope.vDetalleSensor = null;
   $scope.tipos = tiposSensores;
   $scope.nuevo = false;
@@ -48,20 +48,60 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal) {
     $scope.vDetalleSensor.remove();
   });
 
+  /**
+   * Guardamos los cambios, verificando previamente la integridad de los datos
+   */
   $scope.guardar = function() {
-    if (typeof (window.NativeStorage) == "undefined") {
-      console.log("Guardamos sensores en almacenamiento local");
-      localStorage.setItem("sensores", angular.toJson($rootScope.sensores));
-      window.history.back();
-    } else {
-      console.log("Guardamos sensores en almacenamiento del sistema");
-      window.NativeStorage.setItem('sensores', $rootScope.sensores, function() {
+    var ok = true;
+    for (var i = 0; i < $rootScope.sensores.length; i++) {
+      var sensor = $rootScope.sensores[i];
+      var esteOk = false;
+      if (sensor.nombre) {
+        if (sensor.tipo) {
+          if (sensor.gpio) {
+            if (sensor.topico) {
+              if (sensor.periodicidad) {
+                esteOk = true;
+              } else
+                $scope.errorGuardado(i, 'período de lectura');
+            } else
+              $scope.errorGuardado(i, 'tópico MQTT');
+          } else
+            $scope.errorGuardado(i, 'puerto GPIO');
+        } else
+          $scope.errorGuardado(i, 'nombre');
+      } else
+        $scope.errorGuardado(i, 'tipo');
+      ok = ok && esteOk;
+    }
+
+    if (ok) {
+      if (typeof (window.NativeStorage) == "undefined") {
+        console.log("Guardamos sensores en almacenamiento local");
+        localStorage.setItem("sensores", angular.toJson($rootScope.sensores));
         window.history.back();
-      }, function() {
-        alert('Error al guardar');
-      });
+      } else {
+        console.log("Guardamos sensores en almacenamiento del sistema");
+        window.NativeStorage.setItem('sensores', $rootScope.sensores, function() {
+          window.history.back();
+        }, function() {
+          alert('Error al guardar');
+        });
+      }
     }
   }
+
+  $scope.errorGuardado = function(sensor, campo) {
+    var obj = $rootScope.sensores[sensor];
+    var nomSensor = (1 + sensor);
+    if (obj.nombre)
+      nomSensor = obj.nombre;
+    $ionicPopup.alert({
+      title : 'Error de definición',
+      template : 'El sensor ' + nomSensor + ' no tiene definido el ' + campo,
+      cssClass : 'error'
+    });
+  };
 
   $scope.volver = function() {
     window.history.back();

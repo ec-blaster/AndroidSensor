@@ -6,4 +6,5 @@ var CMD_INIT = "AS_INITDATA"; // Comando para envío de datos de inicialización
 var CMD_INITOK = "AS_INITOK"; // Comando para confirmar que la inicialización ha ido bien
 var CMD_INITERR = "AS_INITERR"; // Comando para indicar un error de inicialización por parte del Arduino
 var CMD_READ = "AS_READ"; // Comando de petición de lectura de un sensor
+var CMD_READOK = "AS_READOK"; // Comando de envío de datos de un sensor a Android
 var CMD_RESET = "AS_RESET"; // Indicamos al Arduino que se reinicie
