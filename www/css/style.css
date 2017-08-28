@@ -1,5 +1,5 @@
 /* Empty. Add your own CSS if you like */
-.error {
+.error .popup-head, .error h3 {
 	background-color: red;
-	color: white;
+	color: white !important;
 }
