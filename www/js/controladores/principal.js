@@ -196,7 +196,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     for (var i = 0; i < $rootScope.sensores.length; i++) {
       if (i > 0)
         parm += ",";
-      parm += $rootScope.sensores[i].gpio + "=" + $rootScope.tipo;
+      parm += $rootScope.sensores[i].gpio + "=" + $rootScope.sensores[i].tipo;
     }
     $scope.enviarComandoArduino(CMD_INIT, parm);
   };
