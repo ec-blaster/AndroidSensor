@@ -1,7 +1,7 @@
 /**
  * Controlador de la pantalla principal
  */
-app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ionicPopup, $cordovaDevice, MqttClient) {
+app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ionicPopup, $cordovaDevice, $timeout, MqttClient) {
   $scope.estado = {
     mqtt : false,
     arduinoCon : false,
@@ -188,9 +188,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     console.log("=> COMANDO: " + comando);
     console.log("=> PARAMETROS: " + parametros);
     if (typeof (parametros) == "undefined")
-      window.serial.write(comando);
+      window.serial.write(comando + "\n");
     else
-      window.serial.write(comando + " " + parametros);
+      window.serial.write(comando + " " + parametros + "\n");
   };
 
   /**
@@ -297,9 +297,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
 
     // 2.- Actualizamos el valor en el array de lecturas
     $scope.lecturas[idSensor].valor = valor;
-    
+
     // 3.- Lo enviamos al tópico MQTT asociado
-    
+
   };
 
   /**
