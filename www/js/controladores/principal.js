@@ -65,7 +65,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         $scope.desconectarTodo();
         $ionicPopup.alert({
           title : 'Error de conexión MQTT',
-          template : err.errorMessage
+          template : err.errorMessage,
+          cssClass: 'error'
         });
       }
     });
@@ -218,7 +219,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.desconectarTodo();
     $ionicPopup.alert({
       title : 'Error de conexión USB',
-      template : err
+      template : err,
+      cssClass: 'error'
     });
   };
 
@@ -271,7 +273,8 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       if ($rootScope.sensores.length == 0) {
         $ionicPopup.alert({
           title : 'Error',
-          template : 'No hay ningún sensor definido. Debe definir al menos uno'
+          template : 'No hay ningún sensor definido. Debe definir al menos uno',
+          cssClass: 'error'
         });
       } else {
         $scope.conectando = true;
