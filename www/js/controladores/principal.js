@@ -47,9 +47,13 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     return 'android_' + id;
   };
 
-  // Conectamos con el servidor
+  /**
+   * MÉTODOS RELATIVOS A MQTT
+   */
+  /**
+   * Conectamos con el broker MQTT
+   */
   $scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
-
     console.log("Conectando con el broker " + servidor + " con el usuario " + usr);
     MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
     $scope.conectandoMQTT = true;
@@ -67,7 +71,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     });
   };
 
-  // Hemos conectado con el servidor MQTT
+  /**
+   * Conexión exitosa con el broker
+   */
   $scope.MQTTconectado = function() {
     console.log("Conectado con " + $rootScope.mqtt.servidor);
     $scope.conectandoMQTT = false;
@@ -81,8 +87,16 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
 
     $scope.conectarSerie();
   };
+  /**
+   * FIN MQTT
+   */
 
-  // Nos conectamos al puerto serie del arduino (USB OTG)
+  /**
+   * MÉTODOS RELATIVOS AL PUERTO SERIE (USB)
+   */
+  /**
+   * Nos conectamos al puerto serie del arduino (USB OTG)
+   */
   $scope.conectarSerie = function() {
     if (typeof (window.serial) != "undefined") {
       // Pedimos permiso para conectarnos al puerto serie
@@ -131,6 +145,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
 
   };
 
+  /**
+   * Este método procesa un comando proviniente del Arduino
+   */
   $scope.procesarComando = function(cadena) {
     comando = "";
     parametros = "";
@@ -158,6 +175,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       console.log(cadena);
   };
 
+  /**
+   * Método par enviar comandos al Arduino
+   */
   $scope.enviarComandoArduino = function(comando, parametros) {
     console.log("=> COMANDO: " + comando);
     console.log("=> PARAMETROS: " + parametros);
@@ -167,6 +187,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
       window.serial.write(comando + " " + parametros);
   };
 
+  /**
+   * Manda una inicialización al Arduino indicándole la disposición de los sensores
+   */
   $scope.inicializacionArduino = function() {
     console.log('Enviamos la inicialización al Arduino');
     var parm = "";
@@ -178,12 +201,18 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.enviarComandoArduino(CMD_INIT, parm);
   };
 
+  /**
+   * Este método se invoca cuando el Arduino da por buena la inicialización
+   */
   $scope.arduinoInicializado = function() {
     console.log('Arduino inicializado correctamente');
     $scope.estado.arduinoIni = true;
     $scope.todoConectado();
   };
 
+  /**
+   * Método genérico de error del puerto Serie
+   */
   $scope.errorSerie = function(err) {
     console.log(err);
     $scope.desconectarTodo();
@@ -193,12 +222,22 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     });
   };
 
+  /**
+   * FIN MÉTODOS DEL PUERTO SERIE
+   */
+
+  /**
+   * Se invoca cuando todas las conexiones se han realizado con éxito
+   */
   $scope.todoConectado = function() {
     $scope.conectando = false;
     $scope.estado.servicio = true;
     $scope.$apply();
   };
 
+  /**
+   * Se invoca para cerrar todas las conexiones
+   */
   $scope.desconectarTodo = function() {
     if ($scope.estado.mqtt || $scope.conectandoMQTT) {
       console.log('Desconectamos MQTT');
@@ -222,6 +261,9 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.estado.servicio = false;
   };
 
+  /**
+   * Este método se invoca al pulsar el botón Iniciar / Cancelar / Detener
+   */
   $scope.iniciarDetener = function() {
     if ($scope.conectando || $scope.estado.servicio) {
       $scope.desconectarTodo();
