@@ -271,7 +271,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         $scope.enviarComandoArduino(CMD_READ, i);
 
         // Reiniciamos el contador de este sensor
-        $scope.lecturas[i].restante == $rootScope.sensores[i].periodicidad;
+        $scope.lecturas[i].restante = $rootScope.sensores[i].periodicidad;
       } else
         $scope.lecturas[i].restante--;
     }
