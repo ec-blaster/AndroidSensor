@@ -30,6 +30,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "org.iabsoft.androidSensor"
+        },
+        "cordova-plugin-background-mode": {
+            "PACKAGE_NAME": "org.iabsoft.androidSensor"
         }
     },
     "dependent_plugins": {}

@@ -16,7 +16,8 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordovarduino",
-    "cordova-plugin-nativestorage"
+    "cordova-plugin-nativestorage",
+    "cordova-plugin-background-mode"
   ],
   "cordovaPlatforms": [
     "android"
