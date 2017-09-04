@@ -302,7 +302,11 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.lecturas[idSensor].valor = valor;
 
     // 3.- Lo enviamos al tópico MQTT asociado
-
+    var payload = new Paho.MQTT.Message(valor);
+    payload.destinationName = $rootScope.sensores[idSensor].topico;
+    MqttClient.send(payload);
+    console.log("Valor para el sensor " + $rootScope.sensores[idSensor].nombre + " publicado en "
+        + $rootScope.sensores[idSensor].topico)
   };
 
   /**
