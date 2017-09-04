@@ -59,13 +59,19 @@ app.run(function($ionicPlatform, $rootScope) {
       console.log("Cargamos configuración de MQTT desde almacenamiento local");
       $rootScope.mqtt = angular.fromJson(localStorage.getItem("mqtt"));
       if ($rootScope.mqtt == null)
-        $rootScope.mqtt = {};
+        $rootScope.mqtt = {
+          servidor : '',
+          puerto : ''
+        };
     } else {
       console.log("Cargamos configuración de MQTT desde almacenamiento del sistema");
       $rootScope.mqtt = window.NativeStorage.getItem('mqtt', function(datos) {
         $rootScope.mqtt = datos;
         if ($rootScope.mqtt == null)
-          $rootScope.mqtt = {};
+          $rootScope.mqtt = {
+            servidor : '',
+            puerto : ''
+          };
         $rootScope.$apply();
       }, function() {
         alert('Error al cargar configuración de MQTT');

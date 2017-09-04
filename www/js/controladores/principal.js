@@ -56,22 +56,31 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
    * Conectamos con el broker MQTT
    */
   $scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
-    console.log("Conectando con el broker " + servidor);
-    MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
-    $scope.conectandoMQTT = true;
-    MqttClient.connect({
-      timeout : 5,
-      onSuccess : $scope.MQTTconectado,
-      onFailure : function(err) {
-        console.log("Error de conexión: " + err.errorMessage);
-        $scope.desconectarTodo();
-        $ionicPopup.alert({
-          title : 'Error de conexión MQTT',
-          template : err.errorMessage,
-          cssClass : 'error'
-        });
-      }
-    });
+    if (servidor) {
+      console.log("Conectando con el broker " + servidor);
+      MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
+      $scope.conectandoMQTT = true;
+      MqttClient.connect({
+        timeout : 5,
+        onSuccess : $scope.MQTTconectado,
+        onFailure : function(err) {
+          console.log("Error de conexión: " + err.errorMessage);
+          $scope.desconectarTodo();
+          $ionicPopup.alert({
+            title : 'Error de conexión MQTT',
+            template : err.errorMessage,
+            cssClass : 'error'
+          });
+        }
+      });
+    } else {
+      $scope.desconectarTodo();
+      $ionicPopup.alert({
+        title : 'Error de conexión MQTT',
+        template : 'No se ha definido el servidor MQTT',
+        cssClass : 'error'
+      });
+    }
   };
 
   /**
@@ -82,12 +91,6 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.conectandoMQTT = false;
     $scope.estado.mqtt = true;
     $scope.$apply();
-
-    /*
-     * var topico = "sion/pruebas"; MqttClient.subscribe(topico); message = new Paho.MQTT.Message("Hola"); message.destinationName =
-     * topico; MqttClient.send(message);
-     */
-
     $scope.conectarSerie();
   };
   /**
