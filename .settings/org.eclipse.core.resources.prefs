@@ -1,2 +1,7 @@
 eclipse.preferences.version=1
+encoding//www/vistas/app.html=UTF-8
+encoding//www/vistas/config_mqtt.html=UTF-8
 encoding//www/vistas/detalleSensor.html=UTF-8
+encoding//www/vistas/menu.html=UTF-8
+encoding//www/vistas/principal.html=UTF-8
+encoding//www/vistas/sensores.html=UTF-8

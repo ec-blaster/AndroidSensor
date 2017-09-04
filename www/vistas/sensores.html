@@ -13,7 +13,7 @@
 				<i class="icon {{sensor.icono}}"></i>
 				<ion-option-button class="button-assertive" ng-click="sensores.splice($index, 1)"><i class="icon ion-android-cancel"></i></ion-option-button>
 				<h2>{{sensor.nombre}}</h2>
-				GPIO{{sensor.gpio}} / {{sensor.periodicidad}} segundos
+				{{sensor.gpio == -1 ? "SIN GPIO" : "GPIO" + sensor.gpio}} / {{sensor.periodicidad}} segundos
 			</ion-item>
 		</ion-list>
 		<button class="button button-block button-calm boton-centrado" ng-click="nuevoSensor()">Nuevo</button>

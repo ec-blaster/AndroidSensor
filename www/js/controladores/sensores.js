@@ -5,13 +5,16 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
   $scope.vDetalleSensor = null;
   $scope.tipos = tiposSensores;
   $scope.nuevo = false;
+  $scope.usaGpio = true;
 
+  // Abre la ventana de detalles del sensor para un sensor nuevo
   $scope.nuevoSensor = function() {
     $scope.sensor = {};
     $scope.nuevo = true;
     $scope.abrirSensor();
   };
 
+  // Abre la ventana de detalles del sensor para modificar un sensor que ya existe
   $scope.modificarSensor = function(id) {
     $scope.sensor = $rootScope.sensores[id];
     $scope.nuevo = false;
@@ -26,11 +29,14 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
     $scope.vDetalleSensor = modal;
   });
 
+  // Abre la ventana de detalles
   $scope.abrirSensor = function() {
     $scope.vDetalleSensor.show();
   };
 
+  // Cierra la ventana de detalles, guardando los datos del sensor
   $scope.cerrarSensor = function() {
+    $scope.selTipoSensor();
     if ($scope.nuevo && $scope.sensor.nombre && $scope.sensor.tipo) {
       $scope.sensor.activo = true;
       $rootScope.sensores[$rootScope.sensores.length] = $scope.sensor;
@@ -38,10 +44,15 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
     $scope.vDetalleSensor.hide();
   };
 
+  // Este método se invoca al cambiar el tipo de sensor en el desplegable
   $scope.selTipoSensor = function() {
     var frm = document.forms['frmSensor'];
     var idx = frm.tipoSensor.selectedIndex;
     $scope.sensor.icono = $scope.tipos[idx].icono;
+    $scope.sensor.tipo = frm.tipoSensor.value;
+    $scope.usaGpio = $scope.tipos[idx].gpio;
+    if (!$scope.usaGpio)
+      $scope.sensor.gpio = -1;
   };
 
   $scope.$on('$destroy', function() {
@@ -58,7 +69,7 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
       var esteOk = false;
       if (sensor.nombre) {
         if (sensor.tipo) {
-          if (sensor.gpio) {
+          if (sensor.gpio != null) {
             if (sensor.topico) {
               if (sensor.periodicidad) {
                 esteOk = true;

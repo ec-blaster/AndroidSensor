@@ -56,7 +56,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
    * Conectamos con el broker MQTT
    */
   $scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
-    console.log("Conectando con el broker " + servidor + " con el usuario " + usr);
+    console.log("Conectando con el broker " + servidor);
     MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
     $scope.conectandoMQTT = true;
     MqttClient.connect({

@@ -14,10 +14,6 @@ h1 {
 <form name="frmSensor">
 	<ion-content class="has-header padding">
 	<div class="list-inset">
-	  <label class="item item-input item-stacked-label">
-	  	<span class="input-label">Nombre</span>
-	    <input type="text" placeholder="nombre" ng-model="sensor.nombre">
-	  </label>
 	  <label class="item item-input item-select">
 	    <div class="input-label">
 	    Tipo sensor
@@ -26,18 +22,27 @@ h1 {
 	      <option ng-repeat="tipo in tipos" value="{{tipo.id}}">{{tipo.nombre}}</option>
 	    </select>
 	  </label>
+	  
 	  <label class="item item-input item-stacked-label">
+	  	<span class="input-label">Nombre</span>
+	    <input type="text" placeholder="nombre" ng-model="sensor.nombre">
+	  </label>
+	  
+	  <label class="item item-input item-stacked-label" ng-show="usaGpio">
 	    <span class="input-label">GPIO</span>
 	    <input type="number" placeholder="gpio" ng-model="sensor.gpio">
 	  </label>
+	  
 	  <label class="item item-input item-stacked-label">
 	  	<span class="input-label">Tópico</span>
 	    <input type="text" placeholder="topico" ng-model="sensor.topico">
 	  </label>
+	  
 	  <label class="item item-input item-stacked-label">
 	  	<span class="input-label">Atributo</span>
 	    <input type="text" placeholder="atrib" ng-model="sensor.atributo">
 	  </label>
+	  
 	  <label class="item item-input item-stacked-label">
 	  	<span class="input-label">Periodicidad (segs)</span>
 	    <input type="number" placeholder="periodicidad" ng-model="sensor.periodicidad">
