@@ -104,11 +104,13 @@ app.run(function($ionicPlatform, $rootScope) {
   };
 
   $ionicPlatform.ready(function() {
-
-    /*
-     * window.NativeStorage.setItem('mqtt', "Kakita", function() { alert('Configuración guardada'); }, function() { alert('Error al
-     * guardar'); });
-     */
+    // Cargamos la configuración nada más arrancar
     $rootScope.cargarConfig();
+
+    // Activamos el modo "background" para que la aplicación siga activa en segundo plano
+    if (typeof (window.backgroundMode) != "undefined") {
+      window.backgroundMode.enable();
+      window.backgroundMode.overrideBackButton();
+    }
   });
 });

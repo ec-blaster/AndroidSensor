@@ -112,7 +112,7 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         console.log('Permiso concedido');
         var opc = {
           baudRate : 9600,
-          sleepOnPause : true
+          sleepOnPause : false
         // Mantenemos el puerto abierto cuando la app pasa a 2º plano
         };
 
