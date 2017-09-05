@@ -73,8 +73,11 @@ app.run(function($ionicPlatform, $rootScope) {
             puerto : ''
           };
         $rootScope.$apply();
-      }, function() {
-        alert('Error al cargar configuración de MQTT');
+      }, function(err) {
+        $rootScope.mqtt = {
+          servidor : '',
+          puerto : ''
+        };
       });
     }
   };

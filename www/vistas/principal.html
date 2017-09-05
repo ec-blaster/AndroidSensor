@@ -39,9 +39,9 @@
 			</ion-item>
 			<ion-toggle class="item-icon-left" ng-repeat="sensor in sensores" ng-model="sensor.activo">
 				<i class="icon {{sensor.icono}}"></i>
-				<h2>{{sensor.nombre}}</h2>
-				{{sensor.gpio == -1 ? "SIN GPIO" : "GPIO" + sensor.gpio}} / {{sensor.periodicidad}} segundos<br/>
-				Valor: {{lecturas[$index].valor}}
+				<h2><b>{{sensor.nombre}}</b></h2>
+				<div style="color: gray;">{{sensor.gpio == -1 ? "SIN GPIO" : "GPIO" + sensor.gpio}} / {{sensor.periodicidad}} segundos</div>
+				<div style="color: gray;" ng-show="estado.servicio">Valor: <span style="color:navy; font-weight:bold;">{{lecturas[$index].valor}}</span></div>
 			</ion-toggle>
 		</div>
 	</ion-content>
