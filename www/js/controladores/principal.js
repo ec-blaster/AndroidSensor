@@ -193,15 +193,19 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
   };
 
   /**
-   * Método par enviar comandos al Arduino
+   * Método para enviar comandos al Arduino
    */
   $scope.enviarComandoArduino = function(comando, parametros) {
     console.log("=> COMANDO: " + comando);
     console.log("=> PARAMETROS: " + parametros);
-    if (typeof (parametros) == "undefined")
-      window.serial.write(comando + "\n");
-    else
-      window.serial.write(comando + " " + parametros + "\n");
+
+    if (typeof (parametros) != "undefined")
+      comando += " " + parametros;
+
+    window.serial.write(comando + "\n", function() {
+    }, function() {
+      $scope.errorSerie("Error al enviar el comando al Arduino");
+    });
   };
 
   /**
