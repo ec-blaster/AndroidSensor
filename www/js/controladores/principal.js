@@ -56,6 +56,14 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
    * Conectamos con el broker MQTT
    */
   $scope.conectarMQTT = function(servidor, puerto, usr, pwd) {
+    if (typeof (cordova.plugins.backgroundMode) != "undefined") {
+      console.log("Actualizando notificación");
+      cordova.plugins.backgroundMode.configure({
+        title : "Android Sensor",
+        text : "Conectando..."
+      });
+    }
+
     if (servidor) {
       console.log("Conectando con el broker " + servidor);
       MqttClient.init(servidor, puerto, $scope.getIdDispositivo());
@@ -243,6 +251,12 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
     $scope.conectando = false;
     $scope.estado.servicio = true;
     $scope.$apply();
+    if (typeof (cordova.plugins.backgroundMode) != "undefined") {
+      console.log("Actualizando notificación");
+      cordova.plugins.backgroundMode.configure({
+        text : "La comunicación está activa"
+      });
+    }
     $scope.iniciarLecturas();
   };
 
@@ -313,6 +327,13 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
    * Se invoca para cerrar todas las conexiones
    */
   $scope.desconectarTodo = function() {
+    if (typeof (cordova.plugins.backgroundMode) != "undefined") {
+      console.log("Actualizando notificación");
+      cordova.plugins.backgroundMode.configure({
+        text : "La comunicación está inactiva"
+      });
+    }
+
     if ($scope.cronometro != null) {
       console.log('Detenemos las lecturas');
       $timeout.cancel($scope.cronometro);

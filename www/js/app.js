@@ -51,7 +51,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
 });
 
-app.run(function($ionicPlatform, $rootScope) {
+app.run(function($ionicPlatform, $rootScope, $ionicHistory) {
   $rootScope.mqtt = {};
   $rootScope.sensores = [];
   $rootScope.cargarMQTT = function() {
@@ -111,9 +111,39 @@ app.run(function($ionicPlatform, $rootScope) {
     $rootScope.cargarConfig();
 
     // Activamos el modo "background" para que la aplicación siga activa en segundo plano
-    if (typeof (window.backgroundMode) != "undefined") {
-      window.backgroundMode.enable();
-      window.backgroundMode.overrideBackButton();
+    if (typeof (cordova.plugins.backgroundMode) != "undefined") {
+      // Establecemos las propiedades de una notificación que permanecerá activa cuando estemos conectados con el Arduino
+      console.log("Configurando el modo background");
+      cordova.plugins.backgroundMode.setDefaults({
+        title : "Android Sensor",
+        text : "La aplicación se sigue ejecutando",
+        icon : 'icon', // El mismo icono de la aplicación
+        color : 'FFFFFF', // Color de fondo
+        resume : true, // Indica que al pulsar la notificación, volvemos a la aplicación
+        hidden : false, // Mostrará la notificación en la pantalla de bloqueo
+        bigText : false
+      })
+      // cordova.plugins.backgroundMode.overrideBackButton(true);
+
+      $ionicPlatform.registerBackButtonAction(function(e) {
+        e.preventDefault();
+
+        // ¿Hay alguna página a la que volver?
+        if ($ionicHistory.backView()) {
+          // Volvemos atrás
+          $ionicHistory.backView().go();
+        } else {
+          // Es la última página: si está activo el modo background, nos vamos al segundo plano. En caso contrario, salimos
+          if (typeof (cordova.plugins.backgroundMode) != "undefined") {
+            console.log("Nos vamos a segundo plano");
+            cordova.plugins.backgroundMode.moveToBackground();
+          } else
+            ionic.Platform.exitApp();
+        }
+
+        return false;
+      }, 101);
+      cordova.plugins.backgroundMode.enable();
     }
   });
 });
