@@ -1,7 +1,8 @@
 /**
  * Controlador de la pantalla principal
  */
-app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ionicPopup, $cordovaDevice, $timeout, MqttClient) {
+app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ionicPopup, $cordovaDevice, $timeout, $state,
+    MqttClient) {
   $scope.estado = {
     mqtt : false,
     arduinoCon : false,
@@ -384,6 +385,10 @@ app.controller("CtrlPrincipal", function($scope, $rootScope, $ionicPopover, $ion
         $scope.conectarMQTT($rootScope.mqtt.servidor, $rootScope.mqtt.puerto, $rootScope.mqtt.usuario, $rootScope.mqtt.password);
       }
     }
+  };
+
+  $scope.ir = function(pagina) {
+    $state.go(pagina);
   };
 
   /**

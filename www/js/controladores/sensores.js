@@ -35,13 +35,16 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
   };
 
   // Cierra la ventana de detalles, guardando los datos del sensor
-  $scope.cerrarSensor = function() {
+  $scope.cerrarSensor = function(ocultar) {
+    if (typeof (ocultar) == "undefined")
+      ocultar = true;
     $scope.selTipoSensor();
     if ($scope.nuevo && $scope.sensor.nombre && $scope.sensor.tipo) {
       $scope.sensor.activo = true;
       $rootScope.sensores[$rootScope.sensores.length] = $scope.sensor;
     }
-    $scope.vDetalleSensor.hide();
+    if (ocultar)
+      $scope.vDetalleSensor.hide();
   };
 
   // Este método se invoca al cambiar el tipo de sensor en el desplegable
@@ -57,6 +60,13 @@ app.controller("CtrlSensores", function($scope, $rootScope, $ionicModal, $ionicP
 
   $scope.$on('$destroy', function() {
     $scope.vDetalleSensor.remove();
+  });
+
+  $scope.$on('modal.hidden', function(event, toState, toParams, fromState, fromParams) {
+    console.log('Saliendo de modal');
+    // event.preventDefault();
+    // $scope.guardar();
+    $scope.cerrarSensor(false);
   });
 
   /**

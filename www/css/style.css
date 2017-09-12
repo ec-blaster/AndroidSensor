@@ -3,3 +3,7 @@
 	background-color: red;
 	color: white !important;
 }
+
+.deshabilitado {
+	color: silver !important;
+}

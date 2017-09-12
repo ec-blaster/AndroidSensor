@@ -131,6 +131,7 @@ app.run(function($ionicPlatform, $rootScope, $ionicHistory) {
         // ¿Hay alguna página a la que volver?
         if ($ionicHistory.backView()) {
           // Volvemos atrás
+          console.log($ionicHistory.backView().stateName);
           $ionicHistory.backView().go();
         } else {
           // Es la última página: si está activo el modo background, nos vamos al segundo plano. En caso contrario, salimos

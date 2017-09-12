@@ -1,11 +1,11 @@
 <ion-popover-view style="height: 120px; width: 230px;">
 	<ion-content>
 		<ion-list>
-			<ion-item class="item-icon-left" ui-sref="config_mqtt">
+			<ion-item class="item-icon-left" ng-click="estado.servicio || ir('config_mqtt')" ng-class="{'deshabilitado' : estado.servicio}">
 				<i class="icon ion-radio-waves"></i>
 				Servidor MQTT
 			</ion-item>
-			<ion-item class="item-icon-left" ui-sref="sensores">
+			<ion-item class="item-icon-left" ng-click="estado.servicio || ir('sensores')" ng-class="{'deshabilitado' : estado.servicio}">
 				<i class="icon ion-speedometer"></i>
 				Sensores
 			</ion-item>
